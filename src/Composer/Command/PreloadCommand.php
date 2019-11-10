@@ -58,10 +58,12 @@ HELP
       $writer->setStatusCheck(false);
     }
 
-    $writer->write();
+    $file_path = $this->config['export']??"vendor/preload.php";
+
+    $writer->write($file_path);
 
     $io = $this->getIO();
-    $io->writeError('<info>Preload file created successfully.</info>');
+    $io->writeError(sprintf('<info>Preload file created successfully at %s.</info>',$file_path));
     $io->writeError(sprintf('<comment>Preload script contains %d files.</comment>', $writer->getCount()), true, IOInterface::VERBOSE);
     $io->writeError(sprintf('<comment>Elapsed time: %.2f sec.</comment>', $timer->read()), true, IOInterface::VERY_VERBOSE);
   }

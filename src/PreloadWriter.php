@@ -68,8 +68,8 @@ CHECK;
     return $list;
   }
 
-  public function write(): void {
-    $status = file_put_contents('vendor/preload.php', $this->getScript());
+  public function write(string $file_path): void {
+    $status = file_put_contents($file_path, $this->getScript());
     if (!$status) {
       throw new \RuntimeException('Error writing the preload file.');
     }
