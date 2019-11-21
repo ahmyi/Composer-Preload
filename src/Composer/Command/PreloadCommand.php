@@ -53,22 +53,8 @@ HELP
     $this->setConfig($extra['preload'], $input);
     $list = $this->generatePreload();
     $writer = new PreloadWriter($list);
-
     
-
-    $file_path = $this->config['export']??"vendor/preload.php";
-
-    $template_path = $this->config['template']??false;
-    
-    if(!$template_path || !file_exists($template_path)) {
-      if ($this->config['no-status-check']) {
-        $template_path = "vendor/ayesh/composer-preload/templates/default.php";
-      } else {
-        $template_path = "vendor/ayesh/composer-preload/templates/withstatus.php";
-      }
-    }
-
-    $writer->write($file_path,$template_path);
+    $writer->write( $this->config['export'],$this->config['template']);
 
     $io = $this->getIO();
     $io->writeError(sprintf('<info>Preload file created successfully at %s.</info>',$file_path));
@@ -148,17 +134,44 @@ HELP
       }
     }
 
-    $force_positive_string = ['exclude-regex' => null];
+    $force_positive_string = ['exclude-regex' => null,'export' => "vendor/preload.php"];
     foreach ($force_positive_string as $item => $default_value) {
       if (!isset($this->config[$item]) || '' === $this->config[$item]) {
         $this->config[$item] = $default_value;
       }
+
 
       if (isset($this->config[$item]) && !\is_string($this->config[$item])) {
         throw new \InvalidArgumentException(sprintf('"%s" must be string value. %s given.',
           'extra.preload.' . $item,
           \gettype($this->config[$item])));
       }
+    }
+
+    $force_file_path = ['template' => "vendor/ayesh/composer-preload/templates/default.php"];
+
+    foreach ($force_positive_string as $item => $default_value) {
+      if (!isset($this->config[$item]) || '' === $this->config[$item]) {
+        if($item == 'template' && $this->config['no-status-check']) {
+            $default_value = "vendor/ayesh/composer-preload/templates/withstatus.php";
+        }
+        
+        $this->config[$item] = $default_value;
+      }
+
+
+      if (isset($this->config[$item]) && !\is_string($this->config[$item])) {
+        throw new \InvalidArgumentException(sprintf('"%s" must be string value. %s given.',
+          'extra.preload.' . $item,
+          \gettype($this->config[$item])));
+      }
+
+      if (isset($this->config[$item]) && !\file_exists($this->config[$item])) {
+        throw new \InvalidArgumentException(sprintf('"%s" must exists. %s given.',
+          'extra.preload.' . $item,
+          \gettype($this->config[$item])));
+      }
+
     }
   }
 }

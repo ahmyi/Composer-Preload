@@ -55,6 +55,7 @@ example:
             "exclude-files": [
                 "web/some_file_in_paths_to_exclude.php"
             ],
+            "export":"webroot/file_to_export.php",
             "template" : "template/mypreloadtemplate.php"
         }
     }
@@ -62,11 +63,11 @@ example:
 ```
 The `extra.preload` directive contains all the configuration options for this plugin. The `paths` directive must be an 
 array of directories relative to the `composer.json` file. These directories will be scanned recursively for `.php` 
-files, converted to absolute paths, and appended to the `vendor/preload.php` file.
+files, converted to absolute paths, and appended to the exported file path _(default:`vendor/preload.php`)_ .
 
 2: Run the `composer preload` command.
 
-3: Execute the generated `vendor/preload.php` file. You can either run `php vendor/preload.php` or use your web server 
+3: Execute the generated preload file. You can either run `php vendor/preload.php` or use your web server 
 to execute it. See the Preloading section below for more information.
 
 
@@ -121,6 +122,10 @@ An array of file with paths to exclude for. This option is suitable to blacklist
 open but within the path and passes all regex tests. Example of files that may be exclude are phpinfo.php, a test
 file, shell scripts.
 
+- `extra.preload.export` : _Optional_, Default: _`vendor/preload.php`_
+
+Define the file path and name to where it should be exported.
+
 - `extra.preload.template` : _Optional_, 
 Default: 
 _`vendor/ayesh/composer-preload/templates/default.php` (no-status-check=true)_ 
@@ -137,15 +142,16 @@ This options is to allow modification of the existing template to suit need or r
 
 # Preloading
 
-To do the actual preloading, execute `vendor/preload.php`. 
+To do the actual preloading, execute file as define at `extra.preload.export` or `vendor/preload.php` if not defined. 
 
-If you have enabled opcache for CLI ( _to enable opcache via CLI `opcache.enable_cli` at php.ini_ ) applications, you can directly call `php vendor/preload.php` to execute the 
-generated PHP file and warm up the cache right away. 
+If you have enabled opcache for CLI ( _to enable opcache via CLI `opcache.enable_cli` at php.ini_ ) applications, you can directly call the generated PHP file and warm up the cache right away. 
 
 Future versions of this plugin will have a feature to generate the file _and_ immediately run it.
 
 In a webserver context, or when you cannot run the PHP file with the CLI `php` binary. this probably means you'll 
-want to link `vendor/preload.php` into your docroot somwhere and curl it. For example, 
+want to either link or define export path `export.preload.export` into your docroot somwhere and curl it. 
+
+For example of linking to docroot, 
 `ln -s vendor/preload.php path/to/docroot/preload.php` and then `curl localhost/preload.php` on webserver startup.
 
 
@@ -153,8 +159,8 @@ want to link `vendor/preload.php` into your docroot somwhere and curl it. For ex
 
 ### What does this plugin even do?
 
-This plugin can create a new file at `vendor/preload.php` that follows the pattern of Composer's autoloader at 
-`vendor/autoload.php`. This new `preload.php` file contains several function calls that compiles PHP files and cache
+This plugin can create a new file at `vendor/preload.php` or as defined at `export.preload.export` that follows the pattern of Composer's autoloader at 
+`vendor/autoload.php`. This new file contains several function calls that compiles PHP files and cache
 them into PHP's opcache. PHP Opcache is a shared memory (with optional file storage option) feature in PHP that can
 hold compiled PHP files, so the same file doesn't need to be compiled again and again when its called. This is a
 persistent memory until PHP is restarted or the cache is eventually cleared. 
