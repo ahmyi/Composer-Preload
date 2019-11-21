@@ -33,7 +33,7 @@ composer g require ayesh/composer-preload
 1: Modify your `composer.json` file, and create a section called `extra` if it's not there already. Following is an 
 example:
 
-```
+```JSON
 {
     "extra": {
         "preload": {
@@ -54,7 +54,8 @@ example:
             ],
             "exclude-files": [
                 "web/some_file_in_paths_to_exclude.php"
-            ]
+            ],
+            "template" : "template/mypreloadtemplate.php"
         }
     }
 }
@@ -107,7 +108,7 @@ hard to read, but ¯\\_(ツ)_/¯.
 If this setting is set to `true` (you can also pass command line option `--no-status-check`), make the generated 
 `preload.php` file not contain additional checks to make sure the opcache is enabled. This setting is disabled by 
 default, and the generated `preload.php` file will contain a small snippet on the top that makes it quit if opcache is 
-not enabled.
+not enabled. This option will be void if `extra.preload.template` is set.
 
  - `extra.preload.files` : _Optional_
 
@@ -119,6 +120,20 @@ An array of single files to be included. This setting is optional. The files mus
 An array of file with paths to exclude for. This option is suitable to blacklist a certain file that opcache will never 
 open but within the path and passes all regex tests. Example of files that may be exclude are phpinfo.php, a test
 file, shell scripts.
+
+- `extra.preload.template` : _Optional_, 
+Default: 
+_`vendor/ayesh/composer-preload/templates/default.php` (no-status-check=true)_ 
+_`vendor/ayesh/composer-preload/templates/withstatus.php (no-status-check=false)`_
+
+This options is to allow modification of the existing template to suit need or requirement. Place `[:opcode:]` To define where the opcode should be written. Eg.
+
+```PHP
+<?php
+[:opcode:]
+?>
+```
+
 
 # Preloading
 
