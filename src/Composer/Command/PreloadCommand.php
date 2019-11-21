@@ -54,13 +54,21 @@ HELP
     $list = $this->generatePreload();
     $writer = new PreloadWriter($list);
 
-    if ($this->config['no-status-check']) {
-      $writer->setStatusCheck(false);
-    }
+    
 
     $file_path = $this->config['export']??"vendor/preload.php";
 
-    $writer->write($file_path);
+    $template_path = $this->config['template']??false;
+    
+    if(!$template_path || !file_exists($template_path)) {
+      if ($this->config['no-status-check']) {
+        $template_path = "vendor/ayesh/composer-preload/templates/default.php";
+      } else {
+        $template_path = "vendor/ayesh/composer-preload/templates/withstatus.php";
+      }
+    }
+
+    $writer->write($file_path,$template_path);
 
     $io = $this->getIO();
     $io->writeError(sprintf('<info>Preload file created successfully at %s.</info>',$file_path));
