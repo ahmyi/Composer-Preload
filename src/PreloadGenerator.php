@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Ayesh\ComposerPreload;
+namespace Ahmyi\ComposerPreload;
 
 class PreloadGenerator {
   /**

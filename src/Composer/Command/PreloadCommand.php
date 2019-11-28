@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Ayesh\ComposerPreload\Composer\Command;
+namespace Ahmyi\ComposerPreload\Composer\Command;
 
-use Ayesh\ComposerPreload\PreloadGenerator;
-use Ayesh\ComposerPreload\PreloadList;
-use Ayesh\ComposerPreload\PreloadWriter;
+use Ahmyi\ComposerPreload\PreloadGenerator;
+use Ahmyi\ComposerPreload\PreloadList;
+use Ahmyi\ComposerPreload\PreloadWriter;
 use Ayesh\PHP_Timer\Stopwatch;
 use Composer\Command\BaseCommand;
 use Composer\IO\IOInterface;

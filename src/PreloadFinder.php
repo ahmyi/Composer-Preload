@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Ayesh\ComposerPreload;
+namespace Ahmyi\ComposerPreload;
 
 use Symfony\Component\Finder\Finder;
 
