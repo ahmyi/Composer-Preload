@@ -1,5 +1,5 @@
 {
-    "name": "ayesh/composer-preload",
+    "name": "ahmyi/composer-preload",
     "description": "Preload your sweet sweet code to opcache with a composer command, making your code faster to run",
     "type": "composer-plugin",
     "license": "MIT",
@@ -7,6 +7,10 @@
         {
             "name": "Ayesh Karunaratne",
             "email": "ayesh@ayesh.me"
+        },
+        {
+            "name": "ahmyi",
+            "email": "cryptoamity@gmail.com"
         }
     ],
     "require": {
@@ -21,16 +25,16 @@
     },
     "autoload": {
         "psr-4": {
-            "Ayesh\\ComposerPreload\\": "src/"
+            "Ahmyi\\ComposerPreload\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Ayesh\\ComposerPreload\\Tests\\": "tests/"
+            "Ahmyi\\ComposerPreload\\Tests\\": "tests/"
         }
     },
     "extra": {
-        "class": "Ayesh\\ComposerPreload\\Composer\\Plugin"
+        "class": "Ahmyi\\ComposerPreload\\Composer\\Plugin"
     },
     "scripts": {
         "test": ["phpunit "]

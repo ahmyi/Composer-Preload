@@ -53,15 +53,11 @@ HELP
     $this->setConfig($extra['preload'], $input);
     $list = $this->generatePreload();
     $writer = new PreloadWriter($list);
-
-    if ($this->config['no-status-check']) {
-      $writer->setStatusCheck(false);
-    }
-
-    $writer->write();
+    $file_path = $this->config['export'];
+    $writer->write( $file_path,$this->config['template']);
 
     $io = $this->getIO();
-    $io->writeError('<info>Preload file created successfully.</info>');
+    $io->writeError(sprintf('<info>Preload file created successfully at %s.</info>',$file_path));
     $io->writeError(sprintf('<comment>Preload script contains %d files.</comment>', $writer->getCount()), true, IOInterface::VERBOSE);
     $io->writeError(sprintf('<comment>Elapsed time: %.2f sec.</comment>', $timer->read()), true, IOInterface::VERY_VERBOSE);
   }
@@ -86,7 +82,7 @@ HELP
     foreach ($this->config['paths'] as $path) {
       $generator->addPath($path);
     }
-
+    
     foreach ($this->config['exclude'] as $path) {
       $generator->addExcludePath($path);
     }
@@ -95,6 +91,10 @@ HELP
 
     foreach ($this->config['extensions'] as $extension) {
       $generator->addIncludeExtension($extension);
+    }
+
+    if(isset($this->config['exclude-files'])) {
+      $generator->addExcludeFiles($this->config['exclude-files']);
     }
 
     return $generator->getList();
@@ -134,17 +134,43 @@ HELP
       }
     }
 
-    $force_positive_string = ['exclude-regex' => null];
+    $force_positive_string = ['exclude-regex' => null,'export' => "vendor/preload.php"];
     foreach ($force_positive_string as $item => $default_value) {
       if (!isset($this->config[$item]) || '' === $this->config[$item]) {
         $this->config[$item] = $default_value;
       }
+
 
       if (isset($this->config[$item]) && !\is_string($this->config[$item])) {
         throw new \InvalidArgumentException(sprintf('"%s" must be string value. %s given.',
           'extra.preload.' . $item,
           \gettype($this->config[$item])));
       }
+    }
+
+    $force_file_path = ['template' => "vendor/ayesh/composer-preload/templates/default.php"];
+
+    foreach ($force_file_path as $item => $default_value) {
+      if (!isset($this->config[$item]) || '' === $this->config[$item]) {
+        if($item == 'template' && $this->config['no-status-check']) {
+            $default_value = "vendor/ayesh/composer-preload/templates/withstatus.php";
+        }
+        
+        $this->config[$item] = $default_value;
+      }
+
+
+      if (isset($this->config[$item]) && !\is_string($this->config[$item])) {
+        throw new \InvalidArgumentException(sprintf('"%s" must be string value. %s given.',
+          'extra.preload.' . $item,
+          \gettype($this->config[$item])));
+      }
+
+      if (isset($this->config[$item]) && !\file_exists($this->config[$item])) {
+        throw new \InvalidArgumentException(sprintf('"%s" must exists.',
+          'extra.preload.' . $item));
+      }
+
     }
   }
 }
