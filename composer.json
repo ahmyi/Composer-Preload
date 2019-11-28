@@ -5,12 +5,12 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Ayesh Karunaratne",
-            "email": "ayesh@ayesh.me"
-        },
-        {
             "name": "ahmyi",
             "email": "cryptoamity@gmail.com"
+        },
+        {
+            "name": "Ayesh Karunaratne",
+            "email": "ayesh@ayesh.me"
         }
     ],
     "require": {
