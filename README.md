@@ -21,11 +21,11 @@ the shelves, configure PHP to automatically load this file.
 
 Just the way you'd install a normal composer package, you can install this plugin aswell:
 ```
-composer require ayesh/composer-preload
+composer require ahmyi/composer-preload
 ```
 If you would rather install this globally:
 ```
-composer g require ayesh/composer-preload
+composer g require ahmyi/composer-preload
 ```
 
 # Configuration
@@ -128,8 +128,8 @@ Define the file path and name to where it should be exported.
 
 - `extra.preload.template` : _Optional_, 
 Default: 
-_`vendor/ayesh/composer-preload/templates/default.php` (no-status-check=true)_ 
-_`vendor/ayesh/composer-preload/templates/withstatus.php (no-status-check=false)`_
+_`vendor/ahmyi/composer-preload/templates/default.php` (no-status-check=true)_ 
+_`vendor/ahmyi/composer-preload/templates/withstatus.php (no-status-check=false)`_
 
 This options is to allow modification of the existing template to suit need or requirement. Place `[:opcode:]` To define where the opcode should be written. Eg.
 
